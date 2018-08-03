@@ -4,24 +4,23 @@ import { TouchableOpacity } from 'react-native';
 import { View } from 'react-primitives';
 import { animated, interpolate, Spring } from 'react-spring/dist/native';
 import { compose, omitProps, withHandlers, withState } from 'recompact';
+import buttonAnimations from './buttonAnimations';
 
 const AnimatedView = animated(View);
 
-const PressAnimationState = {
-  from: { scale: 1, translateY: 0 },
-  to: { scale: 0.90, translateY: 1 },
-};
-
-const buildAnimatedTransform = ({ scale, translateY }) => ({
+const buildAnimatedTransform = ({ scale, translateX, translateY }) => ({
   transform: [
     { scale: interpolate([scale], s => s) },
+    { translateX: interpolate([translateX], x => x) },
     { translateY: interpolate([translateY], y => y) },
   ],
 });
 
 const ButtonPressAnimation = ({
   activeOpacity,
+  animation,
   children,
+  config,
   disabled,
   isPressed,
   onPress,
@@ -36,9 +35,10 @@ const ButtonPressAnimation = ({
     onPressOut={onPressOut}
   >
     <Spring
-      from={PressAnimationState.from}
+      config={config}
+      from={animation.from}
       native
-      to={isPressed ? PressAnimationState.to : PressAnimationState.from}
+      to={isPressed ? animation.to : animation.from}
     >
       {springValues => (
         <AnimatedView style={buildAnimatedTransform(springValues)}>
@@ -51,7 +51,12 @@ const ButtonPressAnimation = ({
 
 ButtonPressAnimation.propTypes = {
   activeOpacity: PropTypes.number,
+  animation: PropTypes.shape({
+    from: PropTypes.object.isRequired,
+    to: PropTypes.object.isRequired,
+  }),
   children: PropTypes.node,
+  config: PropTypes.object,
   disabled: PropTypes.bool,
   isPressed: PropTypes.bool,
   onPress: PropTypes.func,
@@ -61,6 +66,8 @@ ButtonPressAnimation.propTypes = {
 
 ButtonPressAnimation.defaultProps = {
   activeOpacity: 1,
+  animation: buttonAnimations.animation.default,
+  config: buttonAnimations.config.default,
 };
 
 export default compose(
