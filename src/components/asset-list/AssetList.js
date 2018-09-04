@@ -1,17 +1,17 @@
-import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { SectionList } from 'react-native';
-import { compose, withProps } from 'recompact';
 import styled from 'styled-components/primitives';
-import { withSafeAreaViewInsetValues } from '../../hoc';
-import { colors, position } from '../../styles';
-import { FabWrapper, FloatingActionButton, WalletConnectFab } from '../fab';
-import { FlexItem } from '../layout';
+import { compose } from 'recompact';
+import { get } from 'lodash';
+import { SectionList } from 'react-native';
+
+import AssetListFooter from './AssetListFooter';
 import AssetListHeader from './AssetListHeader';
 import AssetListItem from './AssetListItem';
-import AssetListFooter from './AssetListFooter';
 import AssetListSkeleton from './AssetListSkeleton';
+import { colors, position } from '../../styles';
+import { FabWrapper, FloatingActionButton } from '../fab';
+import { withSafeAreaViewInsetValues } from '../../hoc';
 
 const List = styled(SectionList)`
   ${position.size('100%')}
@@ -29,62 +29,38 @@ const buildListBottomPadding = (safeAreaInset) => {
 
 const AssetList = ({
   isEmpty,
-  onPressWalletConnect,
   safeAreaInset,
   sections,
+  hideHeader,
+  hideFooter,
   ...props
-}) => (
-  <FlexItem>
-    <FabWrapper
-      items={[(
-        <WalletConnectFab
-          disabled={isEmpty}
-          key="walletConnectFab"
-          onPress={onPressWalletConnect}
-        />
-      )]}
-    >
-      {isEmpty ? (
-        <AssetListSkeleton />
-      ) : (
-        <List
-          contentContainerStyle={{
-            // We want to add enough spacing below the list so that when the user scrolls to the bottom,
-            // the bottom of the list content lines up with the top of the FABs (+ padding).
-            paddingBottom: buildListBottomPadding(safeAreaInset),
-          }}
-          keyExtractor={assetListKeyExtractor}
-          renderItem={AssetListItem}
-          renderSectionFooter={AssetListFooter}
-          renderSectionHeader={headerProps => <AssetListHeader {...headerProps} />}
-          scrollIndicatorInsets={{
-            bottom: safeAreaInset.bottom,
-            top: AssetListHeader.height,
-          }}
-          sections={sections}
-        />
-      )}
-    </FabWrapper>
-  </FlexItem>
-);
+}) => (isEmpty ? (
+  <AssetListSkeleton />
+) : (
+  <List
+    contentContainerStyle={{
+      // We want to add enough spacing below the list so that when the user scrolls to the bottom,
+      // the bottom of the list content lines up with the top of the FABs (+ padding).
+      paddingBottom: buildListBottomPadding(safeAreaInset),
+    }}
+    keyExtractor={assetListKeyExtractor}
+    renderItem={AssetListItem}
+    renderSectionFooter={!hideFooter && AssetListFooter}
+    renderSectionHeader={!hideHeader && (headerProps => <AssetListHeader {...headerProps} />)}
+    scrollIndicatorInsets={{
+      bottom: safeAreaInset.bottom,
+      top: AssetListHeader.height,
+    }}
+    sections={sections}
+  />
+));
 
 AssetList.propTypes = {
   isEmpty: PropTypes.bool,
-  onPressWalletConnect: PropTypes.func,
   safeAreaInset: PropTypes.object,
   sections: PropTypes.arrayOf(PropTypes.object),
+  hideFooter: PropTypes.bool,
+  hideHeader: PropTypes.bool,
 };
 
-export default compose(
-  withSafeAreaViewInsetValues,
-  withProps(({ sections }) => {
-    let isEmpty = true;
-
-    for (let i = 0; i < sections.length; i += 1) {
-      if (!isEmpty) break;
-      isEmpty = !sections[i].totalItems;
-    }
-
-    return { isEmpty };
-  }),
-)(AssetList);
+export default compose(withSafeAreaViewInsetValues)(AssetList);

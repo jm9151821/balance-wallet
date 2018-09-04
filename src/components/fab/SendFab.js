@@ -12,11 +12,11 @@ const GradientBackground = styled(RadialGradient)`
   ${position.cover}
 `;
 
-const WalletConnectIcon = styled(Icon)`
+const SendIcon = styled(Icon)`
   margin-bottom: 2px;
 `;
 
-const WalletConnectFab = ({ disabled, onPress, ...props }) => (
+const SendFab = ({ disabled, onPress, ...props }) => (
   <FloatingActionButton {...props} disabled={disabled} onPress={onPress}>
     {({ size }) => (
       <Fragment>
@@ -27,13 +27,13 @@ const WalletConnectFab = ({ disabled, onPress, ...props }) => (
             radius={size}
           />
         )}
-        <WalletConnectIcon name="walletConnect" />
+        <SendIcon name="send" />
       </Fragment>
     )}
   </FloatingActionButton>
 );
 
-WalletConnectFab.propTypes = {
+SendFab.propTypes = {
   disabled: PropTypes.bool,
   onPress: PropTypes.func,
 };
@@ -46,7 +46,7 @@ export default compose(
         return onPress(event);
       }
 
-      return navigation.navigate('QRScannerScreen');
+      return navigation.navigate('SendScreen');
     },
   }),
-)(WalletConnectFab);
+)(SendFab);

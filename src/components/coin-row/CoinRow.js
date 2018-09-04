@@ -1,18 +1,21 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components/primitives';
+import { TouchableOpacity } from 'react-native';
+
 import Column from '../layout/Column';
+import CoinIcon from '../CoinIcon';
 import Row from '../layout/Row';
 import { padding } from '../../styles';
-import CoinIcon from '../CoinIcon';
 
 const Container = styled(Row)`
   ${padding(12, 19, 12, 15)}
+  width: 100%;
 `;
 
 const Content = styled(Column)`
-  flex: 1;
-  height: 40;
+  flex-grow: 1;
+  height: 40px;
   margin-left: 12px;
 `;
 
@@ -22,10 +25,12 @@ const CoinRow = ({
   bottomRowRender,
   name,
   native,
+  onPress,
+  style,
   symbol,
   topRowRender,
 }) => (
-  <Container align="center">
+  <Container component={TouchableOpacity} align="center" onPress={onPress} activeOpacity={onPress ? 0.2 : 1} style={style}>
     <CoinIcon symbol={symbol} />
     <Content justify="space-between">
       <Row align="center" justify="space-between">
@@ -53,9 +58,11 @@ const CoinRow = ({
 CoinRow.propTypes = {
   address: PropTypes.string,
   balance: PropTypes.object,
-  native: PropTypes.object,
   bottomRowRender: PropTypes.func,
   name: PropTypes.string,
+  native: PropTypes.object,
+  onPress: PropTypes.func,
+  style: PropTypes.any,
   symbol: PropTypes.string,
   topRowRender: PropTypes.func,
 };

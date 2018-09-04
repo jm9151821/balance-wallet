@@ -10,6 +10,7 @@ import { Header, HeaderButton } from '../components/header';
 import { FlexItem, Page } from '../components/layout';
 import { withHideSplashScreenOnMount } from '../hoc';
 import { position } from '../styles';
+import { FabWrapper, WalletConnectFab, SendFab } from '../components/fab';
 
 const buildUniqueTokenList = (uniqueTokensAssets) => {
   const list = [];
@@ -49,6 +50,7 @@ const sortAssetsByNativeAmount = (assets, showShitcoins) => {
 
 const WalletScreen = ({
   accountInfo,
+  onPressSend,
   onPressProfile,
   onPressWalletConnect,
   onToggleShowShitcoins,
@@ -72,6 +74,13 @@ const WalletScreen = ({
     },
   };
 
+  let isEmpty = false;
+
+  // for (let i = 0; i < sections.length; i += 1) {
+  //   if (!isEmpty) break;
+  //   isEmpty = !sections[i].totalItems;
+  // }
+
   const assetsByMarketValue = groupAssetsByMarketValue(accountInfo.assets);
   const totalShitcoins = get(assetsByMarketValue, 'noValue', []).length;
   if (totalShitcoins) {
@@ -83,6 +92,11 @@ const WalletScreen = ({
     };
   }
 
+  const fabItems = [
+    <SendFab disable={isEmpty} key="sendFab" onPress={onPressSend} />,
+    <WalletConnectFab disable={isEmpty} key="walletConnectFab" onPress={onPressWalletConnect} />,
+  ];
+
   return (
     <Page component={FlexItem} style={position.sizeAsObject('100%')}>
       <Header>
@@ -90,11 +104,17 @@ const WalletScreen = ({
           <Avatar />
         </HeaderButton>
       </Header>
-      <AssetList
-        onPressWalletConnect={onPressWalletConnect}
-        sections={filterEmptyAssetSections([sections.balances, sections.collectibles])}
-        showShitcoins={showShitcoins}
-      />
+      <FlexItem>
+        <FabWrapper items={fabItems}>
+          <AssetList
+            onPressSend={onPressSend}
+            onPressWalletConnect={onPressWalletConnect}
+            sections={filterEmptyAssetSections([sections.balances, sections.collectibles])}
+            showShitcoins={showShitcoins}
+            isEmpty={isEmpty}
+          />
+        </FabWrapper>
+      </FlexItem>
     </Page>
   );
 };
@@ -104,6 +124,7 @@ WalletScreen.propTypes = {
   fetching: PropTypes.bool.isRequired,
   fetchingUniqueTokens: PropTypes.bool.isRequired,
   onPressProfile: PropTypes.func.isRequired,
+  onPressSend: PropTypes.func.isRequired,
   onPressWalletConnect: PropTypes.func.isRequired,
   onToggleShowShitcoins: PropTypes.func,
   showShitcoins: PropTypes.bool,
@@ -122,6 +143,7 @@ export default compose(
   withState('showShitcoins', 'toggleShowShitcoins', true),
   connect(reduxProps, null),
   withHandlers({
+    onPressSend: ({ navigation }) => () => navigation.navigate('SendScreen'),
     onPressProfile: ({ navigation }) => () => navigation.navigate('SettingsScreen'),
     onPressWalletConnect: ({ navigation }) => () => navigation.navigate('QRScannerScreen'),
     onToggleShowShitcoins: ({ showShitcoins, toggleShowShitcoins }) => () => toggleShowShitcoins(!showShitcoins),

@@ -8,8 +8,10 @@ import AvatarIcon from './svg/AvatarIcon';
 import BalanceLogoIcon from './svg/BalanceLogoIcon';
 import CaretIcon from './svg/CaretIcon';
 import ClockIcon from './svg/ClockIcon';
+import FaceIcon from './svg/FaceIcon';
 import SpinnerIcon from './svg/SpinnerIcon';
 import ThreeDotsIcon from './svg/ThreeDotsIcon';
+import SendIcon from './svg/SendIcon';
 import WalletConnectIcon from './svg/WalletConnectIcon';
 import WarningIcon from './svg/WarningIcon';
 
@@ -27,9 +29,11 @@ Icon.IconTypes = {
   balanceLogo: BalanceLogoIcon,
   caret: CaretIcon,
   clock: ClockIcon,
+  face: FaceIcon,
   spinner: SpinnerIcon,
   threeDots: ThreeDotsIcon,
   walletConnect: WalletConnectIcon,
+  send: SendIcon,
   warning: WarningIcon,
 };
 

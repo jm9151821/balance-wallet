@@ -60,7 +60,7 @@ const Button = ({
 
 Button.propTypes = {
   children: PropTypes.node.isRequired,
-  onPress: PropTypes.func.isRequired,
+  onPress: PropTypes.func,
   size: PropTypes.oneOf(Object.keys(ButtonSizeTypes)),
   style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   textProps: PropTypes.object,
