@@ -5,7 +5,7 @@ import { AlertIOS, StatusBar, Vibration } from 'react-native';
 import { connect } from 'react-redux';
 import { sendTransaction } from '../model/wallet';
 import { walletConnectSendTransactionHash } from '../model/walletconnect';
-import { getTransactionToApprove } from '../reducers/transactionsToApprove';
+import { getTransactionToApprove } from '../redux/transactionsToApprove';
 import TransactionConfirmationScreen from './TransactionConfirmationScreen';
 
 class TransactionConfirmationScreenWithData extends Component {

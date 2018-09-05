@@ -1,24 +1,18 @@
 import firebase from 'react-native-firebase';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import thunk from 'redux-thunk';
-import { account, commonStorage, accountUpdateAccountAddress } from 'balance-common';
+import { commonStorage, accountUpdateAccountAddress } from 'balance-common';
 import { AppRegistry } from 'react-native';
 import { compose, withProps } from 'recompact';
 import { connect, Provider } from 'react-redux';
-import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { NavigationActions } from 'react-navigation';
 
 import Navigation from './navigation';
 import Routes from './screens/Routes';
-import transactionsToApprove, { addTransactionToApprove } from './reducers/transactionsToApprove';
+import store from './redux/store';
+import { addTransactionToApprove } from './redux/transactionsToApprove';
 import { walletConnectGetTransaction } from './model/walletconnect';
 import { walletInit } from './model/wallet';
-
-const store = createStore(
-  combineReducers({ account, transactionsToApprove }),
-  applyMiddleware(thunk),
-);
 
 class App extends Component {
   static propTypes = {
