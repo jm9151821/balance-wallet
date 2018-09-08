@@ -10,11 +10,6 @@ export default class FlyInView extends Component {
     style: PropTypes.object,
   };
 
-  static defaultProps = {
-    children: [],
-    style: {},
-  };
-
   state = {
     animation: new Animated.Value(0),
   };
