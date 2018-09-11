@@ -252,8 +252,6 @@ class SendScreen extends Component {
 
     const { selectedAsset } = this.state;
 
-    console.log(selectedAsset)
-
     const fee = get(gasPrice, 'txFee.native.value.display', '$0.00').substring(1);
     const time = get(gasPrice, 'estimatedTime.display', '');
     const isZeroAssetAmount = Number(assetAmount) <= 0;
@@ -315,11 +313,11 @@ class SendScreen extends Component {
               isValid={isValidAddress}
               onChange={this.onChangeAddressInput}
               placeholder="Ethereum Address: (0x...)"
-              value={isValidAddress ? abbreviations.address(recipient) : recipient}
+              value={recipient}
             />
           </AddressInputContainer>
           <AddressInputBottomBorder />
-          {isValidAddress ? this.renderAssets() : this.renderEmptyState()}
+          {recipient && isValidAddress ? this.renderAssets() : this.renderEmptyState()}
         </Container>
       </KeyboardAvoidingView>
     );
